@@ -1,11 +1,19 @@
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
+  experimental: {
+    appManifest: false,
+  },
 
+  srcDir: "app/",
   devtools: {
     enabled: true,
   },
 
-  modules: ["@pinia/nuxt", "@pinia-plugin-persistedstate/nuxt"],
+  modules: [
+    "@pinia/nuxt",
+    "@nuxtjs/tailwindcss",
+    "pinia-plugin-persistedstate/nuxt",
+  ],
 
   css: ["./app/assets/css/main.css"],
 

@@ -17,7 +17,7 @@
 
       <!-- Auth Form Card -->
       <div class="bg-white rounded-2xl shadow-xl p-8">
-        <slot />
+        <slot/>
       </div>
 
       <!-- Back to Home Link -->
