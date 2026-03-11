@@ -97,8 +97,8 @@ export const useAuthStore = defineStore("auth", {
   },
 
   persist: {
-    storage: piniaPluginPersistedstate.cookies(), // Use localStorage for persistence
+    storage: piniaPluginPersistedstate.cookies(), // 
     pick: ["user", "token"],
-    // Only persist these fields
+    
   },
 });

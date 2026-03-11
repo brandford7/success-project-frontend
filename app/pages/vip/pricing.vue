@@ -189,116 +189,130 @@
 </template>
 
 <script setup lang="ts">
-import { VipDuration, type VipPlan } from '~/types/vip'
+import { VipDuration, type VipPlan } from "~/types/vip";
 
 definePageMeta({
-  layout: 'default',
-  middleware: 'auth',
-})
+  layout: "default",
+  middleware: "auth",
+});
 
-const authStore = useAuthStore()
-const router = useRouter()
-const config = useRuntimeConfig()
+const authStore = useAuthStore();
+const router = useRouter();
+const config = useRuntimeConfig();
 
-const upgrading = ref(false)
-const upgradingPlanId = ref<string | null>(null)
+const upgrading = ref(false);
+const upgradingPlanId = ref<string | null>(null);
 
 const plans: VipPlan[] = [
   {
-    id: '1-month',
-    name: '1 Month',
+    id: "daily",
+    name: "1 Day",
+    duration: VipDuration.ONE_DAY,
+    price: 5,
+    features: [
+      "Access to all VIP tips",
+      "Detailed analysis & reasoning",
+      "Priority support",
+      "Higher accuracy predictions",
+      "No ads",
+    ],
+  },
+  {
+    id: "1-month",
+    name: "1 Month",
     duration: VipDuration.ONE_MONTH,
     price: 50,
     features: [
-      'Access to all VIP tips',
-      'Detailed analysis & reasoning',
-      'Priority support',
-      'Higher accuracy predictions',
-      'No ads',
+       "Everything in 1 Daily",
+      "Save $100 (66.6% off)",
+      "Extended access",
+      "Best for serious bettors",
+      
     ],
   },
   {
-    id: '3-months',
-    name: '3 Months',
+    id: "3-months",
+    name: "3 Months",
     duration: VipDuration.THREE_MONTHS,
     price: 100,
     features: [
-      'Everything in 1 Month',
-      'Save ₵50 (33% off)',
-      'Extended access',
-      'Best for serious bettors',
-      'Cancel anytime',
+      "Everything in 1 Month",
+      "Save $50 (33% off)",
+      "Extended access",
+      "Best for serious bettors",
+      
     ],
     popular: true,
-    savings: 'Save ₵50',
+    savings: "Save $50",
   },
   {
-    id: '6-months',
-    name: '6 Months',
+    id: "6-months",
+    name: "6 Months",
     duration: VipDuration.SIX_MONTHS,
     price: 200,
     features: [
-      'Everything in 3 Months',
-      'Save ₵100 (33% off)',
-      'Half year access',
-      'Great value',
-      'Premium support',
+      "Everything in 3 Months",
+      "Save $100 (33% off)",
+      "Half year access",
+      "Great value",
+      "Premium support",
     ],
-    savings: 'Save ₵100',
+    savings: "Save $100",
   },
   {
-    id: '1-year',
-    name: '1 Year',
+    id: "1-year",
+    name: "1 Year",
     duration: VipDuration.ONE_YEAR,
     price: 400,
     features: [
-      'Everything in 6 Months',
-      'Save ₵200 (33% off)',
-      'Full year access',
-      'Maximum value',
-      'Priority support',
+      "Everything in 6 Months",
+      "Save $200 (33% off)",
+      "Full year access",
+      "Maximum value",
+      "Priority support",
     ],
-    savings: 'Save ₵200',
+    savings: "Save $200",
   },
-]
+];
 
 const handleUpgrade = async (plan: VipPlan) => {
   if (authStore.isVip) {
-    alert('You are already a VIP member!')
-    return
+    alert("You are already a VIP member!");
+    return;
   }
 
   if (!authStore.user?.email && !authStore.user?.phoneNumber) {
-    alert('Please update your profile with an email address')
-    return
+    alert("Please update your profile with an email address");
+    return;
   }
 
   if (upgrading.value) {
-    return
+    return;
   }
 
-  upgrading.value = true
-  upgradingPlanId.value = plan.id
+  upgrading.value = true;
+  upgradingPlanId.value = plan.id;
 
   try {
-    const { $api } = useNuxtApp()
-    
+    const { $api } = useNuxtApp();
+
     // Initialize payment - get fresh reference from backend
-    const response = await $api.post('/payments/initialize', {
+    const response = await $api.post("/payments/initialize", {
       duration: plan.duration,
-    })
+    });
 
-    const data = response.data
-    console.log('Payment initialized:', data.reference)
+    const data = response.data;
+    console.log("Payment initialized:", data.reference);
 
-    const email = authStore.user.email || `${authStore.user.phoneNumber}@placeholder.com`
+    const email =
+      authStore.user.email || `${authStore.user.phoneNumber}@placeholder.com`;
 
     // Access Paystack
-    const paystack = (window as any).PaystackPop
+    const paystack = (window as any).PaystackPop;
 
     if (!paystack || !paystack.setup) {
-      alert('Payment system not loaded. Please refresh the page.')
-      throw new Error('Paystack not loaded')
+      alert("Payment system not loaded. Please refresh the page.");
+      throw new Error("Paystack not loaded");
     }
 
     // Setup handler with regular functions (not async)
@@ -306,72 +320,77 @@ const handleUpgrade = async (plan: VipPlan) => {
       key: config.public.paystackPublicKey,
       email: email,
       amount: plan.price * 100,
-      currency: 'GHS', // or 'NGN'
+      currency: "GHS", // or 'NGN'
       ref: data.reference,
       metadata: {
         custom_fields: [
           {
             display_name: "User ID",
             variable_name: "user_id",
-            value: authStore.user.id
+            value: authStore.user.id,
           },
           {
             display_name: "Plan",
             variable_name: "plan_name",
-            value: plan.name
+            value: plan.name,
           },
           {
             display_name: "Duration",
             variable_name: "duration",
-            value: plan.duration.toString()
-          }
-        ]
+            value: plan.duration.toString(),
+          },
+        ],
       },
-      onClose: function() {
-        console.log('Payment window closed')
-        upgrading.value = false
-        upgradingPlanId.value = null
+      onClose: function () {
+        console.log("Payment window closed");
+        upgrading.value = false;
+        upgradingPlanId.value = null;
       },
-      callback: function(response: any) {
-        console.log('Payment successful:', response)
-        
+      callback: function (response: any) {
+        console.log("Payment successful:", response);
+
         // Handle async verification inside the callback
-        $api.get(`/payments/verify?reference=${response.reference}`)
+        $api
+          .get(`/payments/verify?reference=${response.reference}`)
           .then((verifyResponse) => {
             if (verifyResponse.data.verified) {
               // Update user in store
-              return authStore.fetchUser()
+              return authStore.fetchUser();
             } else {
-              throw new Error('Payment verification failed')
+              throw new Error("Payment verification failed");
             }
           })
           .then(() => {
             // Redirect to success page
-            router.push('/vip/success')
+            router.push("/vip/success");
           })
           .catch((error) => {
-            console.error('Verification error:', error)
-            alert('Payment verification failed. Please contact support with reference: ' + response.reference)
+            console.error("Verification error:", error);
+            alert(
+              "Payment verification failed. Please contact support with reference: " +
+                response.reference,
+            );
           })
           .finally(() => {
-            upgrading.value = false
-            upgradingPlanId.value = null
-          })
-      }
-    })
+            upgrading.value = false;
+            upgradingPlanId.value = null;
+          });
+      },
+    });
 
     // Open the payment popup
-    handler.openIframe()
-
+    handler.openIframe();
   } catch (error: any) {
-    console.error('Payment error:', error)
-    
-    const errorMessage = error.response?.data?.message || error.message || 'Failed to initialize payment'
-    alert(errorMessage)
-    
-    upgrading.value = false
-    upgradingPlanId.value = null
-  }
-}
-</script>
+    console.error("Payment error:", error);
 
+    const errorMessage =
+      error.response?.data?.message ||
+      error.message ||
+      "Failed to initialize payment";
+    alert(errorMessage);
+
+    upgrading.value = false;
+    upgradingPlanId.value = null;
+  }
+};
+</script>
