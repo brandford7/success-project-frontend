@@ -31,7 +31,7 @@
             @input="handleSearch"
             type="text"
             class="input w-full"
-            placeholder="Search by email or phone..."
+            placeholder="Search by email or phone...."
           />
         </div>
 
