@@ -100,30 +100,51 @@
 
       <span class="text-gray-400"> Posted {{ timeAgo(tip.createdAt) }} </span>
     </div>
-
     <!-- Admin Actions -->
     <div
       v-if="showAdminActions"
-      class="flex gap-2 mt-4 pt-4 border-t border-gray-200"
+      class="px-6 py-4 bg-gray-50 border-t border-gray-200"
     >
-      <button
-        @click="$emit('edit', tip)"
-        class="flex-1 px-3 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium"
-      >
-        Edit
-      </button>
-      <button
-        @click="$emit('delete', tip)"
-        class="flex-1 px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
-      >
-        Delete
-      </button>
+      <div class="flex items-center justify-between">
+        <div class="flex gap-2">
+          <button
+            @click="$emit('edit', tip)"
+            class="text-sm text-blue-600 hover:text-blue-700 font-medium"
+          >
+            Edit
+          </button>
+          <button
+            @click="$emit('delete', tip)"
+            class="text-sm text-red-600 hover:text-red-700 font-medium"
+          >
+            Delete
+          </button>
+        </div>
+
+        <!-- Quick Status Update -->
+        <div v-if="tip.status === 'pending'" class="flex gap-2">
+          <button
+            @click="$emit('quick-status', tip.id, 'won')"
+            class="px-3 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors text-xs font-medium"
+            title="Mark as Won"
+          >
+            ✅ Won
+          </button>
+          <button
+            @click="$emit('quick-status', tip.id, 'lost')"
+            class="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors text-xs font-medium"
+            title="Mark as Lost"
+          >
+            ❌ Lost
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Tip } from '~/types/tip';
+import type { Tip } from "~/types/tip";
 
 interface Props {
   tip: Tip;
@@ -132,10 +153,18 @@ interface Props {
 
 const props = defineProps<Props>();
 
-defineEmits<{
-  edit: [tip: Tip];
-  delete: [tip: Tip];
-}>();
+interface Emits {
+  (e: "edit", tip: Tip): void;
+  (e: "delete", tip: Tip): void;
+  (e: "quick-status", tipId: string, status: string): void;
+}
+
+defineEmits<Emits>();
+
+interface Props {
+  tip: Tip;
+  showAdminActions?: boolean;
+}
 
 const authStore = useAuthStore();
 

@@ -11,6 +11,7 @@ export interface Tip {
   league: string;
   pick: string;
   odds: number;
+  country: string;
   reasoning: string | null;
   kickoffTime: string;
   status: TipStatus;
@@ -36,8 +37,16 @@ export interface CreateTipDto {
 }
 
 export interface UpdateTipDto {
-  status: TipStatus;
+  match?: string;
   resultNotes?: string;
+  league?: string;
+  pick?: string;
+  country?: string;
+  isVip?: boolean;
+  odds?: number;
+  reasoning?: string;
+  status?: TipStatus;
+  kickoffTime?: string;
 }
 
 export interface QueryTipsDto {

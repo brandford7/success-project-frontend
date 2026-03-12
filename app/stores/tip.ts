@@ -41,7 +41,7 @@ export const useTipsStore = defineStore("tips", {
         const { $api } = useNuxtApp();
 
         console.log("Fetching tips with query:", query); // Debug log
-/*
+        /*
         if (query.status) query.status = params.status;
         if (params.isVip !== undefined) queryParams.isVip = params.isVip;
         if (params.league) queryParams.league = params.league; // Add this
@@ -151,6 +151,42 @@ export const useTipsStore = defineStore("tips", {
         return data;
       } catch (error: any) {
         this.error = error.response?.data?.message || "Failed to update tip";
+        throw error;
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async updateTipStatus(
+      id: string,
+      status: string,
+      resultNotes?: string,
+    ): Promise<Tip> {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const { $api } = useNuxtApp();
+        const { data } = await $api.patch(`/tips/${id}/status`, {
+          status,
+          resultNotes,
+        });
+
+        // Update the tip in the list if it exists
+        const index = this.tips.findIndex((tip) => tip.id === id);
+        if (index !== -1) {
+          this.tips[index] = data;
+        }
+
+        // Update current tip if it's the same
+        if (this.currentTip?.id === id) {
+          this.currentTip = data;
+        }
+
+        return data;
+      } catch (error: any) {
+        this.error =
+          error.response?.data?.message || "Failed to update tip status";
         throw error;
       } finally {
         this.loading = false;

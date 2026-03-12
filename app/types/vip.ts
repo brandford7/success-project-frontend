@@ -1,5 +1,5 @@
 export enum VipDuration {
-  ONE_DAY = 1,
+  ONE_DAY = 1, // Add this
   ONE_MONTH = 30,
   THREE_MONTHS = 90,
   SIX_MONTHS = 180,

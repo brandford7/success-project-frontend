@@ -73,9 +73,9 @@
         <!-- Custom Date Range -->
         <div v-if="dateFilter === 'custom'">
           <label class="label">Start Date</label>
-          <input 
-            v-model="customStartDate" 
-            type="date" 
+          <input
+            v-model="customStartDate"
+            type="date"
             @change="handleCustomDateChange"
             class="input"
           />
@@ -83,9 +83,9 @@
 
         <div v-if="dateFilter === 'custom'">
           <label class="label">End Date</label>
-          <input 
-            v-model="customEndDate" 
-            type="date" 
+          <input
+            v-model="customEndDate"
+            type="date"
             @change="handleCustomDateChange"
             class="input"
           />
@@ -103,13 +103,11 @@
           </select>
         </div>
 
-        <!-- League Filter -->
+        <!-- League Filter with Autocomplete -->
         <div>
-          <label class="label">League</label>
-          <input
-            v-model="filters.league"
-            type="text"
-            class="input"
+          <LeagueAutocomplete
+            v-model="filters.league!"
+            label="League"
             placeholder="Filter by league..."
           />
         </div>
@@ -136,25 +134,61 @@
       </div>
 
       <!-- Active Filters Display -->
-      <div v-if="hasActiveFilters" class="mt-4 flex items-center gap-2 flex-wrap">
+      <div
+        v-if="hasActiveFilters"
+        class="mt-4 flex items-center gap-2 flex-wrap"
+      >
         <span class="text-sm text-gray-600">Active filters:</span>
-        
-        <span v-if="dateFilter !== 'all'" class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+
+        <span
+          v-if="dateFilter !== 'all'"
+          class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+        >
           {{ getDateFilterLabel() }}
-          <button @click="clearDateFilter" class="ml-2 text-blue-600 hover:text-blue-800 font-bold">×</button>
+          <button
+            @click="clearDateFilter"
+            class="ml-2 text-blue-600 hover:text-blue-800 font-bold"
+          >
+            ×
+          </button>
         </span>
 
-        <span v-if="filters.status" class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm capitalize">
+        <span
+          v-if="filters.status"
+          class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm capitalize"
+        >
           {{ filters.status }}
-          <button @click="filters.status = undefined; applyFilters()" class="ml-2 text-purple-600 hover:text-purple-800 font-bold">×</button>
+          <button
+            @click="
+              filters.status = undefined;
+              applyFilters();
+            "
+            class="ml-2 text-purple-600 hover:text-purple-800 font-bold"
+          >
+            ×
+          </button>
         </span>
 
-        <span v-if="filters.league" class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
+        <span
+          v-if="filters.league"
+          class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm"
+        >
           {{ filters.league }}
-          <button @click="filters.league = ''; applyFilters()" class="ml-2 text-green-600 hover:text-green-800 font-bold">×</button>
+          <button
+            @click="
+              filters.league = '';
+              applyFilters();
+            "
+            class="ml-2 text-green-600 hover:text-green-800 font-bold"
+          >
+            ×
+          </button>
         </span>
 
-        <button @click="clearAllFilters" class="text-sm text-red-600 hover:text-red-800 underline">
+        <button
+          @click="clearAllFilters"
+          class="text-sm text-red-600 hover:text-red-800 underline"
+        >
           Clear all
         </button>
       </div>
@@ -265,6 +299,7 @@
 <script setup lang="ts">
 import type { QueryTipsDto, Tip } from "@/types/tip";
 import TipCard from "~/components/tips/TipCard.vue";
+import LeagueAutocomplete from "~/components/tips/LeagueAutocomplete.vue";
 
 definePageMeta({
   layout: "default",
@@ -275,14 +310,17 @@ const authStore = useAuthStore();
 
 const statistics = ref(null as any);
 
+// Filters
+
+
 // Date filter state
-const dateFilter = ref('today'); // Default to today
-const customStartDate = ref('');
-const customEndDate = ref('');
+const dateFilter = ref("today"); // Default to today
+const customStartDate = ref("");
+const customEndDate = ref("");
 
 // Filters
 const filters = reactive<QueryTipsDto>({
-  status: undefined,
+  status: undefined ,
   league: "",
   limit: 20,
   page: 1,
@@ -290,7 +328,11 @@ const filters = reactive<QueryTipsDto>({
 
 // Computed
 const hasActiveFilters = computed(() => {
-  return dateFilter.value !== 'all' || filters.status !== undefined || (filters.league && filters.league.length > 0);
+  return (
+    dateFilter.value !== "all" ||
+    filters.status !== undefined ||
+    (filters.league && filters.league.length > 0)
+  );
 });
 
 // Fetch tips on mount
@@ -322,24 +364,24 @@ const getDateRange = () => {
   endOfWeek.setHours(23, 59, 59, 999);
 
   switch (dateFilter.value) {
-    case 'today':
+    case "today":
       return {
         startDate: today.toISOString(),
         endDate: tomorrow.toISOString(),
       };
-    case 'tomorrow':
+    case "tomorrow":
       const dayAfterTomorrow = new Date(tomorrow);
       dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 1);
       return {
         startDate: tomorrow.toISOString(),
         endDate: dayAfterTomorrow.toISOString(),
       };
-    case 'this_week':
+    case "this_week":
       return {
         startDate: today.toISOString(),
         endDate: endOfWeek.toISOString(),
       };
-    case 'custom':
+    case "custom":
       if (customStartDate.value && customEndDate.value) {
         const start = new Date(customStartDate.value);
         start.setHours(0, 0, 0, 0);
@@ -358,7 +400,7 @@ const getDateRange = () => {
 
 const applyFilters = async () => {
   const dateRange = getDateRange();
-  
+
   const query: QueryTipsDto = {
     ...filters,
     page: 1,
@@ -375,9 +417,9 @@ const applyFilters = async () => {
 };
 
 const handleDateChange = () => {
-  if (dateFilter.value !== 'custom') {
-    customStartDate.value = '';
-    customEndDate.value = '';
+  if (dateFilter.value !== "custom") {
+    customStartDate.value = "";
+    customEndDate.value = "";
   }
   applyFilters();
 };
@@ -389,59 +431,59 @@ const handleCustomDateChange = () => {
 };
 
 const clearDateFilter = () => {
-  dateFilter.value = 'all';
-  customStartDate.value = '';
-  customEndDate.value = '';
+  dateFilter.value = "all";
+  customStartDate.value = "";
+  customEndDate.value = "";
   applyFilters();
 };
 
 const clearAllFilters = () => {
-  dateFilter.value = 'all';
+  dateFilter.value = "all";
   filters.status = undefined;
-  filters.league = '';
-  customStartDate.value = '';
-  customEndDate.value = '';
+  filters.league = "";
+  customStartDate.value = "";
+  customEndDate.value = "";
   applyFilters();
 };
 
 const getDateFilterLabel = () => {
   switch (dateFilter.value) {
-    case 'today':
+    case "today":
       return "Today's Matches";
-    case 'tomorrow':
+    case "tomorrow":
       return "Tomorrow's Matches";
-    case 'this_week':
-      return 'This Week';
-    case 'custom':
+    case "this_week":
+      return "This Week";
+    case "custom":
       return `${customStartDate.value} to ${customEndDate.value}`;
     default:
-      return '';
+      return "";
   }
 };
 
 const getEmptyStateMessage = () => {
-  if (dateFilter.value === 'today') {
-    return 'No matches scheduled for today';
-  } else if (dateFilter.value === 'tomorrow') {
-    return 'No matches scheduled for tomorrow';
+  if (dateFilter.value === "today") {
+    return "No matches scheduled for today";
+  } else if (dateFilter.value === "tomorrow") {
+    return "No matches scheduled for tomorrow";
   } else if (filters.status) {
     return `No ${filters.status} tips found`;
   } else if (filters.league) {
     return `No tips found for "${filters.league}"`;
   }
-  return 'No tips available yet';
+  return "No tips available yet";
 };
 
 const getEmptyStateSubtext = () => {
-  if (dateFilter.value === 'today' || dateFilter.value === 'tomorrow') {
-    return 'Check back later or try a different date range';
+  if (dateFilter.value === "today" || dateFilter.value === "tomorrow") {
+    return "Check back later or try a different date range";
   }
-  return 'Try adjusting your filters or check back soon!';
+  return "Try adjusting your filters or check back soon!";
 };
 
 const goToPage = async (page: number) => {
   const dateRange = getDateRange();
-  
+
   filters.page = page;
   await tipsStore.fetchTips({ ...filters, ...dateRange });
   window.scrollTo({ top: 0, behavior: "smooth" });

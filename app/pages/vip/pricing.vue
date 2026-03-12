@@ -8,56 +8,58 @@
       </p>
     </div>
 
-    <!-- Pricing Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+    <!-- Pricing Cards - 5 Column Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
       <div
         v-for="plan in plans"
         :key="plan.id"
         :class="[
-          'bg-white rounded-lg shadow-lg p-8 relative',
-          plan.popular && 'ring-2 ring-amber-500',
+          'bg-white rounded-lg shadow-lg p-6 relative transition-all hover:shadow-xl',
+          plan.popular && 'ring-2 ring-amber-500 transform scale-105',
         ]"
       >
         <!-- Popular Badge -->
         <div
           v-if="plan.popular"
-          class="absolute top-0 right-8 transform -translate-y-1/2"
+          class="absolute -top-3 left-1/2 transform -translate-x-1/2"
         >
           <span
-            class="bg-amber-500 text-white px-4 py-1 rounded-full text-sm font-semibold"
+            class="bg-amber-500 text-white px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap"
           >
             Most Popular
           </span>
         </div>
 
         <!-- Plan Header -->
-        <div class="text-center mb-6">
-          <h3 class="text-2xl font-bold text-gray-900 mb-2">
+        <div class="text-center mb-4">
+          <h3 class="text-xl font-bold text-gray-900 mb-2">
             {{ plan.name }}
           </h3>
-          <div class="flex items-baseline justify-center mb-2">
-            <span class="text-5xl font-bold text-gray-900"
-              >${{ plan.price }}</span
+          <div class="flex items-baseline justify-center mb-1">
+            <span class="text-3xl font-bold text-gray-900"
+              >${{ plan.price /10}}</span
             >
           </div>
-          <p class="text-gray-600">{{ plan.duration }} days access</p>
+          <p class="text-gray-600 text-sm">
+            {{ getDurationLabel(plan.duration) }}
+          </p>
           <p
             v-if="plan.savings"
-            class="text-green-600 font-semibold text-sm mt-1"
+            class="text-green-600 font-semibold text-xs mt-1"
           >
             {{ plan.savings }}
           </p>
         </div>
 
         <!-- Features -->
-        <ul class="space-y-3 mb-8">
+        <ul class="space-y-2 mb-6">
           <li
             v-for="(feature, index) in plan.features"
             :key="index"
-            class="flex items-start"
+            class="flex items-start text-sm"
           >
             <svg
-              class="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"
+              class="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0"
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -74,20 +76,20 @@
         <!-- CTA Button -->
         <button
           @click="handleUpgrade(plan)"
-          :disabled="upgrading"
+          :disabled="upgrading && upgradingPlanId === plan.id"
           :class="[
-            'w-full py-3 rounded-lg font-semibold transition-colors',
+            'w-full py-2.5 rounded-lg font-semibold transition-colors text-sm',
             plan.popular
               ? 'bg-amber-600 text-white hover:bg-amber-700'
               : 'bg-gray-200 text-gray-900 hover:bg-gray-300',
-            upgrading && 'opacity-50 cursor-not-allowed',
+            upgrading &&
+              upgradingPlanId === plan.id &&
+              'opacity-50 cursor-not-allowed',
           ]"
         >
-          <span v-if="upgradingPlanId !== plan.id">
-            Choose {{ plan.name }}
-          </span>
+          <span v-if="upgradingPlanId !== plan.id"> Choose Plan </span>
           <span v-else class="flex items-center justify-center">
-            <svg class="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24">
+            <svg class="animate-spin h-4 w-4 mr-2" viewBox="0 0 24 24">
               <circle
                 class="opacity-25"
                 cx="12"
@@ -206,14 +208,13 @@ const upgradingPlanId = ref<string | null>(null);
 const plans: VipPlan[] = [
   {
     id: "daily",
-    name: "1 Day",
+    name: "Daily",
     duration: VipDuration.ONE_DAY,
-    price: 5,
+    price: 50,
     features: [
-      "Access to all VIP tips",
-      "Detailed analysis & reasoning",
+      "All VIP tips",
+      "Detailed analysis",
       "Priority support",
-      "Higher accuracy predictions",
       "No ads",
     ],
   },
@@ -221,59 +222,65 @@ const plans: VipPlan[] = [
     id: "1-month",
     name: "1 Month",
     duration: VipDuration.ONE_MONTH,
-    price: 50,
+    price: 500,
     features: [
-       "Everything in 1 Daily",
-      "Save $100 (66.6% off)",
-      "Extended access",
-      "Best for serious bettors",
-      
+      "All Daily features",
+      "30 days access",
+      "Save $100",
+      "Best for new users",
     ],
+    popular: true,
+    savings: "Save $100 (66% off)",
   },
   {
     id: "3-months",
     name: "3 Months",
     duration: VipDuration.THREE_MONTHS,
-    price: 100,
+    price: 1000,
     features: [
-      "Everything in 1 Month",
-      "Save $50 (33% off)",
-      "Extended access",
-      "Best for serious bettors",
-      
+      "All Monthly features",
+      "90 days access",
+      "Save $50",
+      "Great value",
     ],
-    popular: true,
-    savings: "Save $50",
+    savings: "Save $50 (33% off)",
   },
   {
     id: "6-months",
     name: "6 Months",
     duration: VipDuration.SIX_MONTHS,
-    price: 200,
+    price: 2000,
     features: [
-      "Everything in 3 Months",
-      "Save $100 (33% off)",
-      "Half year access",
-      "Great value",
+      "All 3-Month features",
+      "180 days access",
+      "Save $100",
       "Premium support",
     ],
-    savings: "Save $100",
+    savings: "Save $100 (33% off)",
   },
   {
     id: "1-year",
     name: "1 Year",
     duration: VipDuration.ONE_YEAR,
-    price: 400,
+    price: 4000,
     features: [
-      "Everything in 6 Months",
-      "Save $200 (33% off)",
-      "Full year access",
+      "All 6-Month features",
+      "365 days access",
+      "Save $200",
       "Maximum value",
-      "Priority support",
     ],
-    savings: "Save $200",
+    savings: "Save $200 (33% off)",
   },
 ];
+
+const getDurationLabel = (days: number): string => {
+  if (days === 1) return "1 day access";
+  if (days === 30) return "30 days access";
+  if (days === 90) return "90 days access";
+  if (days === 180) return "180 days access";
+  if (days === 365) return "365 days access";
+  return `${days} days access`;
+};
 
 const handleUpgrade = async (plan: VipPlan) => {
   if (authStore.isVip) {
@@ -296,7 +303,7 @@ const handleUpgrade = async (plan: VipPlan) => {
   try {
     const { $api } = useNuxtApp();
 
-    // Initialize payment - get fresh reference from backend
+    // Initialize payment
     const response = await $api.post("/payments/initialize", {
       duration: plan.duration,
     });
@@ -315,12 +322,12 @@ const handleUpgrade = async (plan: VipPlan) => {
       throw new Error("Paystack not loaded");
     }
 
-    // Setup handler with regular functions (not async)
+    // Setup handler
     const handler = paystack.setup({
       key: config.public.paystackPublicKey,
       email: email,
-      amount: plan.price * 100,
-      currency: "GHS", // or 'NGN'
+      amount: plan.price * 100, // Convert to pesewas
+      currency: "GHS",
       ref: data.reference,
       metadata: {
         custom_fields: [
@@ -349,19 +356,16 @@ const handleUpgrade = async (plan: VipPlan) => {
       callback: function (response: any) {
         console.log("Payment successful:", response);
 
-        // Handle async verification inside the callback
         $api
           .get(`/payments/verify?reference=${response.reference}`)
           .then((verifyResponse) => {
             if (verifyResponse.data.verified) {
-              // Update user in store
               return authStore.fetchUser();
             } else {
               throw new Error("Payment verification failed");
             }
           })
           .then(() => {
-            // Redirect to success page
             router.push("/vip/success");
           })
           .catch((error) => {
@@ -378,7 +382,6 @@ const handleUpgrade = async (plan: VipPlan) => {
       },
     });
 
-    // Open the payment popup
     handler.openIframe();
   } catch (error: any) {
     console.error("Payment error:", error);
