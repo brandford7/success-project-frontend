@@ -123,6 +123,7 @@
 </template>
 
 <script setup lang="ts">
+import TipCard from "~/components/tips/TipCard.vue";
 import type { Tip } from "~/types/tip";
 import { TipStatus } from "~/types/tip";
 

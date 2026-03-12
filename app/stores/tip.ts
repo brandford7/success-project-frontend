@@ -41,7 +41,13 @@ export const useTipsStore = defineStore("tips", {
         const { $api } = useNuxtApp();
 
         console.log("Fetching tips with query:", query); // Debug log
-
+/*
+        if (query.status) query.status = params.status;
+        if (params.isVip !== undefined) queryParams.isVip = params.isVip;
+        if (params.league) queryParams.league = params.league; // Add this
+        if (params.startDate) queryParams.startDate = params.startDate;
+        if (params.endDate) queryParams.endDate = params.endDate;
+*/
         const { data } = await $api.get<PaginatedTipsResponse>("/tips", {
           params: query,
         });
