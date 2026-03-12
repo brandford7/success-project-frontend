@@ -44,7 +44,7 @@
             {{ authStore.user?.email || authStore.user?.phoneNumber }}
           </div>
           <p class="text-xs text-gray-500 mt-1">
-            Contact support to change your email or phone number
+            Contact support to change your email or phone number.
           </p>
         </div>
 
