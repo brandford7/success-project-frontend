@@ -48,7 +48,7 @@ export default defineNuxtConfig({
     },
   },
   // ✅ Use node-server for local dev
-  nitro: {
+/*  nitro: {
     preset: "node-server", // Change from cloudflare-pages for local dev
-  },
+  },*/
 });
