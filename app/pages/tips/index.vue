@@ -1,56 +1,30 @@
 <template>
-  <div class="max-w-6xl mx-auto">
+  <div class="max-w-7xl mx-auto px-4 py-8">
     <!-- Header -->
-    <div class="flex justify-between items-center mb-6">
-      <div>
-        <h1 class="text-3xl font-bold text-gray-900">Betting Tips</h1>
-        <p class="text-gray-600 mt-1">
-          Expert predictions to boost your winning chances
-        </p>
-      </div>
-
-      <!-- Statistics Card (Mini) -->
-      <div v-if="statistics" class="bg-white rounded-lg shadow-md p-4">
-        <p class="text-xs text-gray-500 mb-1">Win Rate</p>
-        <p class="text-2xl font-bold text-green-600">
-          {{ statistics.winRate }}%
-        </p>
-        <p class="text-xs text-gray-500">
-          {{ statistics.won }}/{{ statistics.settled }} won
-        </p>
-      </div>
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">Betting Tips</h1>
+      <p class="text-gray-600">
+        Expert predictions and analysis for upcoming matches
+      </p>
     </div>
 
-    <!-- VIP Banner (if not VIP and not admin) -->
+    <!-- VIP Banner (only show to non-VIP users) -->
     <div
-      v-if="authStore.isAuthenticated && !authStore.isVip && !authStore.isAdmin"
-      class="bg-gradient-to-r from-amber-50 to-amber-100 border border-amber-200 rounded-lg p-6 mb-6"
+      v-if="!authStore.isVip && !authStore.isAdmin"
+      class="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-6 mb-6"
     >
       <div class="flex items-center justify-between">
-        <div class="flex items-center">
-          <div class="bg-amber-200 rounded-full p-3 mr-4">
-            <svg
-              class="w-8 h-8 text-amber-600"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-              />
-            </svg>
-          </div>
-          <div>
-            <h3 class="text-lg font-bold text-gray-900">Upgrade to VIP</h3>
-            <p class="text-sm text-gray-600">
-              Get exclusive premium tips with higher accuracy
-            </p>
-          </div>
+        <div>
+          <h3 class="text-xl font-bold mb-1">Unlock VIP Tips</h3>
+          <p class="text-blue-100">
+            Get access to premium tips with detailed analysis
+          </p>
         </div>
         <NuxtLink
           to="/vip/pricing"
-          class="bg-amber-600 text-white px-6 py-3 rounded-lg hover:bg-amber-700 transition-colors font-medium"
+          class="bg-white text-blue-600 px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors font-semibold"
         >
-          Upgrade Now
+          Upgrade to VIP
         </NuxtLink>
       </div>
     </div>
@@ -103,7 +77,7 @@
           </select>
         </div>
 
-        <!-- League Filter with Autocomplete -->
+        <!-- League Filter -->
         <div>
           <LeagueAutocomplete
             v-model="filters.league!"
@@ -134,60 +108,32 @@
       </div>
 
       <!-- Active Filters Display -->
-      <div
-        v-if="hasActiveFilters"
-        class="mt-4 flex items-center gap-2 flex-wrap"
-      >
+      <div v-if="activeFilters.length > 0" class="mt-4 flex flex-wrap gap-2">
         <span class="text-sm text-gray-600">Active filters:</span>
-
-        <span
-          v-if="dateFilter !== 'all'"
-          class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+        <button
+          v-for="filter in activeFilters"
+          :key="filter.key"
+          @click="clearFilter(filter.key)"
+          class="inline-flex items-center gap-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm hover:bg-blue-200 transition-colors"
         >
-          {{ getDateFilterLabel() }}
-          <button
-            @click="clearDateFilter"
-            class="ml-2 text-blue-600 hover:text-blue-800 font-bold"
+          <span>{{ filter.label }}: {{ filter.value }}</span>
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            ×
-          </button>
-        </span>
-
-        <span
-          v-if="filters.status"
-          class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm capitalize"
-        >
-          {{ filters.status }}
-          <button
-            @click="
-              filters.status = undefined;
-              applyFilters();
-            "
-            class="ml-2 text-purple-600 hover:text-purple-800 font-bold"
-          >
-            ×
-          </button>
-        </span>
-
-        <span
-          v-if="filters.league"
-          class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm"
-        >
-          {{ filters.league }}
-          <button
-            @click="
-              filters.league = '';
-              applyFilters();
-            "
-            class="ml-2 text-green-600 hover:text-green-800 font-bold"
-          >
-            ×
-          </button>
-        </span>
-
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
         <button
           @click="clearAllFilters"
-          class="text-sm text-red-600 hover:text-red-800 underline"
+          class="text-sm text-red-600 hover:text-red-700 font-medium"
         >
           Clear all
         </button>
@@ -218,17 +164,6 @@
       <p class="text-gray-600 mt-4">Loading tips...</p>
     </div>
 
-    <!-- Error State -->
-    <div
-      v-else-if="tipsStore.error"
-      class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg"
-    >
-      <p>{{ tipsStore.error }}</p>
-      <button @click="applyFilters" class="mt-2 text-sm underline">
-        Try again
-      </button>
-    </div>
-
     <!-- Empty State -->
     <div
       v-else-if="tipsStore.tips.length === 0"
@@ -247,28 +182,25 @@
           d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
         />
       </svg>
-      <p class="text-gray-500 mb-2">{{ getEmptyStateMessage() }}</p>
+      <p class="text-gray-500 mb-2">No tips found</p>
       <p class="text-sm text-gray-400">
-        {{ getEmptyStateSubtext() }}
+        {{
+          activeFilters.length > 0
+            ? "Try adjusting your filters"
+            : "Check back later for new tips!"
+        }}
       </p>
     </div>
 
     <!-- Tips Grid -->
     <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-      <TipCard
-        v-for="tip in tipsStore.tips"
-        :key="tip.id"
-        :tip="tip"
-        :show-admin-actions="authStore.isAdmin"
-        @edit="handleEdit"
-        @delete="handleDelete"
-      />
+      <TipCard v-for="tip in tipsStore.tips" :key="tip.id" :tip="tip" />
     </div>
 
     <!-- Pagination -->
     <div
       v-if="tipsStore.pagination.totalPages > 1"
-      class="flex justify-center gap-2"
+      class="flex justify-center gap-2 mt-8"
     >
       <button
         @click="goToPage(tipsStore.pagination.page - 1)"
@@ -297,7 +229,7 @@
 </template>
 
 <script setup lang="ts">
-import type { QueryTipsDto, Tip } from "@/types/tip";
+import type { QueryTipsDto } from "@/types/tip";
 import TipCard from "~/components/tips/TipCard.vue";
 import LeagueAutocomplete from "~/components/tips/LeagueAutocomplete.vue";
 
@@ -308,195 +240,174 @@ definePageMeta({
 const tipsStore = useTipsStore();
 const authStore = useAuthStore();
 
-const statistics = ref(null as any);
-
-// Filters
-
-
-// Date filter state
-const dateFilter = ref("today"); // Default to today
+const dateFilter = ref("today");
 const customStartDate = ref("");
 const customEndDate = ref("");
 
-// Filters
 const filters = reactive<QueryTipsDto>({
-  status: undefined ,
+  status: undefined,
   league: "",
   limit: 20,
   page: 1,
 });
 
-// Computed
-const hasActiveFilters = computed(() => {
-  return (
-    dateFilter.value !== "all" ||
-    filters.status !== undefined ||
-    (filters.league && filters.league.length > 0)
-  );
+// Active filters for display
+const activeFilters = computed(() => {
+  const active: { key: string; label: string; value: any }[] = [];
+
+  if (filters.status) {
+    active.push({
+      key: "status",
+      label: "Status",
+      value: filters.status,
+    });
+  }
+
+  if (filters.league) {
+    active.push({
+      key: "league",
+      label: "League",
+      value: filters.league,
+    });
+  }
+
+  if (dateFilter.value !== "all") {
+    active.push({
+      key: "date",
+      label: "Date",
+      value:
+        dateFilter.value === "custom"
+          ? "Custom range"
+          : dateFilter.value.replace("_", " "),
+    });
+  }
+
+  return active;
 });
 
-// Fetch tips on mount
-onMounted(async () => {
-  console.log("Fetching tips...");
-
-  try {
-    // Fetch statistics
-    statistics.value = await tipsStore.fetchStatistics();
-    console.log("Statistics:", statistics.value);
-
-    // Fetch tips (with today's date by default)
-    await applyFilters();
-    console.log("Tips loaded:", tipsStore.tips.length);
-  } catch (error) {
-    console.error("Error loading tips:", error);
-  }
+onMounted(() => {
+  applyFilters();
 });
 
 const getDateRange = () => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-
-  const endOfWeek = new Date(today);
-  endOfWeek.setDate(endOfWeek.getDate() + (7 - today.getDay()));
-  endOfWeek.setHours(23, 59, 59, 999);
+  const now = new Date();
+  let startDate: string | undefined;
+  let endDate: string | undefined;
 
   switch (dateFilter.value) {
     case "today":
-      return {
-        startDate: today.toISOString(),
-        endDate: tomorrow.toISOString(),
-      };
+      startDate = new Date(now.setHours(0, 0, 0, 0)).toISOString();
+      endDate = new Date(now.setHours(23, 59, 59, 999)).toISOString();
+      break;
+
     case "tomorrow":
-      const dayAfterTomorrow = new Date(tomorrow);
-      dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 1);
-      return {
-        startDate: tomorrow.toISOString(),
-        endDate: dayAfterTomorrow.toISOString(),
-      };
+      const tomorrow = new Date(now);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      startDate = new Date(tomorrow.setHours(0, 0, 0, 0)).toISOString();
+      endDate = new Date(tomorrow.setHours(23, 59, 59, 999)).toISOString();
+      break;
+
     case "this_week":
-      return {
-        startDate: today.toISOString(),
-        endDate: endOfWeek.toISOString(),
-      };
+      const weekStart = new Date(now);
+      weekStart.setDate(now.getDate() - now.getDay());
+      startDate = new Date(weekStart.setHours(0, 0, 0, 0)).toISOString();
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekStart.getDate() + 6);
+      endDate = new Date(weekEnd.setHours(23, 59, 59, 999)).toISOString();
+      break;
+
     case "custom":
-      if (customStartDate.value && customEndDate.value) {
-        const start = new Date(customStartDate.value);
-        start.setHours(0, 0, 0, 0);
-        const end = new Date(customEndDate.value);
-        end.setHours(23, 59, 59, 999);
-        return {
-          startDate: start.toISOString(),
-          endDate: end.toISOString(),
-        };
+      if (customStartDate.value) {
+        startDate = new Date(customStartDate.value).toISOString();
       }
-      return {};
+      if (customEndDate.value) {
+        endDate = new Date(customEndDate.value).toISOString();
+      }
+      break;
+
+    case "all":
     default:
-      return {};
+      // No date filter
+      break;
   }
+
+  return { startDate, endDate };
 };
 
-const applyFilters = async () => {
+const applyFilters = () => {
   const dateRange = getDateRange();
 
+  // Build query object
   const query: QueryTipsDto = {
-    ...filters,
-    page: 1,
-    ...dateRange,
+    page: filters.page,
+    limit: filters.limit,
   };
 
-  // Remove empty values
-  if (!query.league) delete query.league;
-  if (!query.status) delete query.status;
+  // Add optional filters only if they have values
+  if (filters.status) {
+    query.status = filters.status;
+  }
 
-  console.log("Applying filters:", query);
+  if (filters.league) {
+    query.league = filters.league;
+  }
 
-  await tipsStore.fetchTips(query);
+  if (dateRange.startDate) {
+    query.startDate = dateRange.startDate;
+  }
+
+  if (dateRange.endDate) {
+    query.endDate = dateRange.endDate;
+  }
+
+  
+  console.log('Applying filters:', query);
+  tipsStore.fetchTips(query);
 };
 
 const handleDateChange = () => {
   if (dateFilter.value !== "custom") {
-    customStartDate.value = "";
-    customEndDate.value = "";
-  }
-  applyFilters();
-};
-
-const handleCustomDateChange = () => {
-  if (customStartDate.value && customEndDate.value) {
     applyFilters();
   }
 };
 
-const clearDateFilter = () => {
-  dateFilter.value = "all";
-  customStartDate.value = "";
-  customEndDate.value = "";
+const handleCustomDateChange = () => {
+  if (customStartDate.value || customEndDate.value) {
+    applyFilters();
+  }
+};
+
+const clearFilter = (key: string) => {
+  if (key === "status") {
+    filters.status = undefined;
+  } else if (key === "league") {
+    filters.league = "";
+  } else if (key === "date") {
+    dateFilter.value = "all";
+    customStartDate.value = "";
+    customEndDate.value = "";
+  }
+
   applyFilters();
 };
 
 const clearAllFilters = () => {
-  dateFilter.value = "all";
+  // Reset all filters
   filters.status = undefined;
   filters.league = "";
+  filters.page = 1;
+  dateFilter.value = "all";
   customStartDate.value = "";
   customEndDate.value = "";
+  filters.isVip = undefined; // Clear VIP filter to show all tips (backend will handle access control)
+  
+  // Apply filters - backend will automatically hide VIP tips for non-VIP users
   applyFilters();
 };
 
-const getDateFilterLabel = () => {
-  switch (dateFilter.value) {
-    case "today":
-      return "Today's Matches";
-    case "tomorrow":
-      return "Tomorrow's Matches";
-    case "this_week":
-      return "This Week";
-    case "custom":
-      return `${customStartDate.value} to ${customEndDate.value}`;
-    default:
-      return "";
-  }
-};
-
-const getEmptyStateMessage = () => {
-  if (dateFilter.value === "today") {
-    return "No matches scheduled for today";
-  } else if (dateFilter.value === "tomorrow") {
-    return "No matches scheduled for tomorrow";
-  } else if (filters.status) {
-    return `No ${filters.status} tips found`;
-  } else if (filters.league) {
-    return `No tips found for "${filters.league}"`;
-  }
-  return "No tips available yet";
-};
-
-const getEmptyStateSubtext = () => {
-  if (dateFilter.value === "today" || dateFilter.value === "tomorrow") {
-    return "Check back later or try a different date range";
-  }
-  return "Try adjusting your filters or check back soon!";
-};
-
-const goToPage = async (page: number) => {
-  const dateRange = getDateRange();
-
+const goToPage = (page: number) => {
   filters.page = page;
-  await tipsStore.fetchTips({ ...filters, ...dateRange });
+  applyFilters();
   window.scrollTo({ top: 0, behavior: "smooth" });
-};
-
-const handleEdit = (tip: Tip) => {
-  navigateTo(`/admin/tips/${tip.id}/edit`);
-};
-
-const handleDelete = async (tip: Tip) => {
-  if (confirm(`Are you sure you want to delete the tip for "${tip.match}"?`)) {
-    await tipsStore.deleteTip(tip.id);
-    await applyFilters();
-  }
 };
 </script>

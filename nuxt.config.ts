@@ -39,11 +39,16 @@ export default defineNuxtConfig({
         { name: "viewport", content: "width=device-width, initial-scale=1" },
       ],
       script: [
+        { src: "https://js.paystack.co/v1/inline.js", defer: true },
         {
-          src: "https://js.paystack.co/v1/inline.js",
+          src: "https://korablobstorage.blob.core.windows.net/modal-bucket/korapay-collections.min.js",
           defer: true,
         },
       ],
     },
+  },
+  // ✅ Use node-server for local dev
+  nitro: {
+    preset: "node-server", // Change from cloudflare-pages for local dev
   },
 });
