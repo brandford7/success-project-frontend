@@ -352,6 +352,7 @@
         <div class="mb-4">
           <label class="label">Duration</label>
           <select v-model="grantDuration" class="input">
+            <option :value="1">1 Day (24 hours)</option>
             <option :value="30">1 Month (30 days)</option>
             <option :value="90">3 Months (90 days)</option>
             <option :value="180">6 Months (180 days)</option>
@@ -471,7 +472,7 @@ const copyUserId = async (userId: string) => {
     textarea.value = userId;
     document.body.appendChild(textarea);
     textarea.select();
-    document.execCommand("copy");
+    
     document.body.removeChild(textarea);
     alert("User ID copied!");
   }
