@@ -154,6 +154,23 @@ const selectLeague = (league: League) => {
   showSuggestions.value = false
 }
 
+// Add this watch to sync country when data loads or modelValue changes
+watch([() => props.modelValue, allLeagues], ([newModel, leagues]) => {
+  if (newModel && leagues.length > 0) {
+    // Find the league object that matches the name in the input
+    const matchedLeague = leagues.find(
+      l => l.name.toLowerCase() === newModel.toLowerCase()
+    );
+
+    if (matchedLeague) {
+      // Emit the country so the parent's form.country gets populated
+      emit('update:country', matchedLeague.country);
+      // Also emit league-selected so the parent knows it's a "valid" match
+      emit('league-selected', matchedLeague);
+    }
+  }
+}, { immediate: true });
+
 const handleBlur = () => {
   // Delay to allow click on suggestion
   setTimeout(() => {
