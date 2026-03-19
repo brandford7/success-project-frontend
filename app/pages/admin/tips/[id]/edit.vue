@@ -113,14 +113,21 @@
 
         <!-- Pick -->
         <div>
-          <label class="label">Pick / Prediction</label>
-          <input
+          <QuickPickSelector
             v-model="form.pick"
-            type="text"
-            required
-            class="input"
-            placeholder="e.g., Home Win, Over 2.5 Goals"
+            v-model:category="form.category"
+            label="Betting Pick"
           />
+
+          <div class="mt-4">
+            <label class="label">Market Category</label>
+            <input
+              v-model="form.category"
+              type="text"
+              class="input bg-gray-50"
+              readonly
+            />
+          </div>
         </div>
 
         <!-- Odds -->
@@ -227,7 +234,9 @@
 </template>
 
 <script setup lang="ts">
+import { toast } from "@hoppscotch/vue-sonner";
 import LeagueAutocomplete from "~/components/tips/LeagueAutocomplete.vue";
+import QuickPickSelector from "~/components/tips/QuickPickSelector.vue";
 import type { TipStatus } from "~/types/tip";
 
 definePageMeta({
@@ -245,6 +254,7 @@ const form = reactive({
   league: "",
   country: "",
   pick: "",
+  category: "",
   odds: 0,
   kickoffTime: "",
   reasoning: "",
@@ -308,6 +318,7 @@ const handleSubmit = async () => {
       league: form.league,
       country: form.country,
       pick: form.pick,
+      category: form.category,
       odds: form.odds,
       kickoffTime,
       reasoning: form.reasoning,
@@ -315,10 +326,11 @@ const handleSubmit = async () => {
       isVip: form.isVip,
     });
 
-    alert("Tip updated successfully!");
+    toast.success("Tip updated successfully!");
     router.push("/admin/tips");
   } catch (error) {
     console.error("Failed to update tip:", error);
+    toast.error("Failed to update tip.");
   }
 };
 </script>

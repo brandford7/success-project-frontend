@@ -236,7 +236,9 @@
           >
             <td class="px-6 py-4">
               <div>
-                <p class="font-medium text-gray-900">{{ tip.match }}</p>
+                <p class="font-medium text-gray-900">
+                  {{ tip.match.toLocaleUpperCase() }}
+                </p>
                 <p class="text-sm text-gray-500">{{ tip.league }}</p>
               </div>
             </td>
@@ -244,7 +246,7 @@
               {{ tip.pick }}
             </td>
             <td class="px-6 py-4 text-sm text-gray-500">
-              {{ tip.marketCategory || 'N/A' }}
+              {{ tip.category }}
             </td>
             <td class="px-6 py-4 text-sm font-semibold text-blue-600">
               {{ tip.odds }}
@@ -320,7 +322,8 @@
 </template>
 
 <script setup lang="ts">
-import { TipStatus } from "~/types/tip"; // Import the enum
+import { toast } from "@hoppscotch/vue-sonner";
+import { TipStatus } from "~/types/tip";
 import type { QueryTipsDto, Tip } from "~/types/tip";
 
 definePageMeta({
@@ -361,6 +364,7 @@ const goToPage = async (page: number) => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
+/*
 const handleDelete = async (tip: Tip) => {
   if (
     confirm(
@@ -376,6 +380,25 @@ const handleDelete = async (tip: Tip) => {
       // Error handled by store
     }
   }
+};
+*/
+const handleDelete = (tip: Tip) => {
+  // This replaces the old 'if(confirm)' logic with a modern toast action
+  toast.warning(`Delete tip: ${tip.match}?`, {
+    description: "This will permanently remove this prediction.",
+    action: {
+      label: "Delete Now",
+      onClick: async () => {
+        try {
+          await tipsStore.deleteTip(tip.id);
+          toast.success("Successfully deleted!");
+          await applyFilters(); // Refresh the table
+        } catch (error) {
+          toast.error("Could not delete. Check your connection.");
+        }
+      },
+    },
+  });
 };
 
 const countByStatus = (status: TipStatus) => {

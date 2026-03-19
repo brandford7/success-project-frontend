@@ -202,6 +202,7 @@
 </template>
 
 <script setup lang="ts">
+import { toast } from "@hoppscotch/vue-sonner";
 import LeagueAutocomplete from "~/components/tips/LeagueAutocomplete.vue";
 import QuickPickSelector from "~/components/tips/QuickPickSelector.vue";
 
@@ -251,10 +252,11 @@ const handleSubmit = async () => {
       kickoffTime,
     });
 
-    alert("Tip created successfully!");
+    toast.success("Tip created successfully!");
     router.push("/admin/tips");
   } catch (error) {
-    console.error("Failed to create tip:", error);
+    //console.error("Failed to create tip:", error);
+    toast.error("Failed to create tip.");
   }
 };
 </script>
