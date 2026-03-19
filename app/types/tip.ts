@@ -10,6 +10,7 @@ export interface Tip {
   match: string;
   league: string;
   pick: string;
+  category: string;
   odds: number;
   country: string;
   reasoning: string | null;
@@ -30,6 +31,7 @@ export interface CreateTipDto {
   match: string;
   league: string;
   pick: string;
+  category: string;
   odds: number;
   reasoning?: string;
   kickoffTime: string;
@@ -41,6 +43,7 @@ export interface UpdateTipDto {
   resultNotes?: string;
   league?: string;
   pick?: string;
+  category?: string;
   country?: string;
   isVip?: boolean;
   odds?: number;
@@ -55,6 +58,7 @@ export interface QueryTipsDto {
   limit?: number;
   isVip?: boolean;
   league?: string;
+  country?: string;
   startDate?: string;
   endDate?: string;
 }

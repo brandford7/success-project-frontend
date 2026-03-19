@@ -62,13 +62,6 @@ export const useTipsStore = defineStore("tips", {
       }
     },
 
-    async fetchAll(page = 1) {
-      return await this.fetchTips({
-        page,
-        isVip: undefined,
-      });
-    },
-
     async fetchVipTips(query: QueryTipsDto = {}) {
       this.loading = true;
       this.error = null;

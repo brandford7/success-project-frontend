@@ -1,6 +1,5 @@
 <template>
   <div class="max-w-7xl mx-auto">
-    <!-- Header -->
     <div class="flex justify-between items-center mb-6">
       <div>
         <NuxtLink
@@ -36,10 +35,8 @@
       </NuxtLink>
     </div>
 
-    <!-- Filters -->
     <div class="bg-white rounded-lg shadow-md p-4 mb-6">
       <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-        <!-- Status Filter -->
         <div>
           <label class="label">Status</label>
           <select v-model="filters.status" class="input">
@@ -51,7 +48,6 @@
           </select>
         </div>
 
-        <!-- VIP Filter -->
         <div>
           <label class="label">Type</label>
           <select v-model="filters.isVip" class="input">
@@ -61,7 +57,6 @@
           </select>
         </div>
 
-        <!-- League Filter -->
         <div>
           <label class="label">League</label>
           <input
@@ -72,7 +67,6 @@
           />
         </div>
 
-        <!-- Limit -->
         <div>
           <label class="label">Per Page</label>
           <select v-model="filters.limit" class="input">
@@ -82,7 +76,6 @@
           </select>
         </div>
 
-        <!-- Apply Button -->
         <div class="flex items-end">
           <button
             @click="applyFilters"
@@ -94,7 +87,6 @@
       </div>
     </div>
 
-    <!-- Stats Summary -->
     <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
       <div class="bg-white rounded-lg shadow-md p-4">
         <p class="text-sm text-gray-500">Total</p>
@@ -128,7 +120,6 @@
       </div>
     </div>
 
-    <!-- Loading State -->
     <div
       v-if="tipsStore.loading"
       class="text-center py-12 bg-white rounded-lg shadow-md"
@@ -155,7 +146,6 @@
       <p class="text-gray-600 mt-4">Loading tips...</p>
     </div>
 
-    <!-- Error State -->
     <div
       v-else-if="tipsStore.error"
       class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg"
@@ -163,7 +153,6 @@
       <p>{{ tipsStore.error }}</p>
     </div>
 
-    <!-- Empty State -->
     <div
       v-else-if="tipsStore.tips.length === 0"
       class="text-center py-12 bg-white rounded-lg shadow-md"
@@ -193,7 +182,6 @@
       </NuxtLink>
     </div>
 
-    <!-- Tips Table -->
     <div v-else class="bg-white rounded-lg shadow-md overflow-hidden">
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
@@ -207,6 +195,11 @@
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
             >
               Pick
+            </th>
+            <th
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Category
             </th>
             <th
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -249,6 +242,9 @@
             </td>
             <td class="px-6 py-4 text-sm text-gray-900">
               {{ tip.pick }}
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-500">
+              {{ tip.marketCategory || 'N/A' }}
             </td>
             <td class="px-6 py-4 text-sm font-semibold text-blue-600">
               {{ tip.odds }}
@@ -293,7 +289,6 @@
       </table>
     </div>
 
-    <!-- Pagination -->
     <div
       v-if="tipsStore.pagination.totalPages > 1"
       class="flex justify-center gap-2 mt-6"

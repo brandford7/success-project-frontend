@@ -217,7 +217,7 @@ definePageMeta({
 
 const tipsStore = useTipsStore()
 
-const statusFilter = ref('')
+const statusFilter = ref('pending')
 const leagueFilter = ref('')
 const updatingTipId = ref<string | null>(null)
 
