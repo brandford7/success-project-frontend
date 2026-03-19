@@ -93,7 +93,7 @@ watch([() => props.modelValue, allPicks], ([newName, picks]) => {
 const selectPick = (pick: Pick) => {
   inputValue.value = pick.name
   emit('update:modelValue', pick.name)
-  emit('update:category', pick.category) // Immediate autopopulate on click
+  emit('update:category', pick.category) 
   emit('pick-selected', pick)
   showSuggestions.value = false
 }
