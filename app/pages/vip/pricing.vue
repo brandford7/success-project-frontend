@@ -35,13 +35,19 @@
       <div v-if="selectedGatewayInfo" class="mt-6 p-4 bg-gray-50 rounded-lg">
         <div class="flex items-start gap-3">
           <div class="text-2xl">ℹ️</div>
-          <div>
+          <div class="flex-1">
             <p class="font-semibold text-gray-900 mb-1">{{ selectedGatewayInfo.name }} Details</p>
             <ul class="text-sm text-gray-600 space-y-1">
               <li>• <strong>Currencies:</strong> {{ selectedGatewayInfo.currencies.join(', ') }}</li>
               <li>• <strong>Best for:</strong> {{ selectedGatewayInfo.regions.join(', ') }}</li>
               <li>• <strong>Processing:</strong> {{ selectedGatewayInfo.processingTime }}</li>
             </ul>
+            <!-- ✅ Show crypto notice -->
+            <div v-if="selectedGateway === 'crypto'" class="mt-3 p-3 bg-orange-50 border border-orange-200 rounded">
+              <p class="text-sm text-orange-800">
+                ⚠️ <strong>Note:</strong> Crypto payments have a 10 USD minimum. Daily plan (₵50) is not available.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -50,7 +56,7 @@
     <!-- VIP Plans -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
       <div
-        v-for="plan in plans"
+        v-for="plan in filteredPlans"
         :key="plan.id"
         :class="[
           'bg-white rounded-lg shadow-md p-6 border-2 transition-all',
@@ -183,7 +189,8 @@ const selectedGatewayInfo = computed(() =>
   paymentGateways.find(g => g.id === selectedGateway.value)
 );
 
-const plans: VipPlan[] = [
+// All plans
+const allPlans: VipPlan[] = [
   {
     id: "daily",
     name: "Daily",
@@ -251,6 +258,15 @@ const plans: VipPlan[] = [
   },
 ];
 
+// ✅ Filter plans based on selected gateway
+const filteredPlans = computed(() => {
+  if (selectedGateway.value === PaymentGateway.CRYPTO) {
+    // Remove daily plan for crypto (below $5 minimum)
+    return allPlans.filter(plan => plan.id !== 'daily');
+  }
+  return allPlans;
+});
+
 const handleUpgrade = async (plan: VipPlan) => {
   if (!authStore.isAuthenticated) {
     router.push("/auth/login");
@@ -274,13 +290,13 @@ const handleUpgrade = async (plan: VipPlan) => {
     // Initialize payment with selected gateway
     const response = await $api.post("/payments/initialize", {
       duration: Number(plan.duration),
-      gateway: selectedGateway.value, // ✅ Make sure this is sent
+      gateway: selectedGateway.value,
     });
 
     const data = response.data;
     console.log("Payment initialized:", data);
 
-    // Store gateway in localStorage for callback
+    // Store gateway and reference in localStorage for callback
     localStorage.setItem('payment_gateway', selectedGateway.value);
     localStorage.setItem('payment_reference', data.reference);
 
@@ -288,7 +304,11 @@ const handleUpgrade = async (plan: VipPlan) => {
     window.location.href = data.authorizationUrl;
   } catch (error: any) {
     console.error("Payment initialization failed:", error);
-    alert(error.response?.data?.message || "Failed to initialize payment");
+    
+    // ✅ Show user-friendly error message
+    const errorMessage = error.response?.data?.message || "Failed to initialize payment. Please try again.";
+    alert(errorMessage);
+    
     upgradingPlanId.value = null;
   }
 };

@@ -154,6 +154,7 @@
 </template>
 
 <script setup lang="ts">
+import { toast } from "@hoppscotch/vue-sonner";
 import * as yup from "yup";
 
 definePageMeta({
@@ -216,6 +217,7 @@ const handleLogin = async () => {
       identifier: form.identifier,
       password: form.password,
     });
+    toast.success("Logged in successfully!");
     router.push("/dashboard");
   } catch (error: any) {
     if (error.name === "ValidationError") {
