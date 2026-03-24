@@ -182,7 +182,7 @@
         >
           Paystack 🔒
         </div>
-        <!--  <div v-if="selectedGateway === 'kora'" class="text-gray-500 font-semibold">Kora 🔒</div>-->
+          <div v-if="selectedGateway === 'kora'" class="text-gray-500 font-semibold">Kora 🔒</div>
         <div
           v-if="selectedGateway === 'crypto'"
           class="text-gray-500 font-semibold"
@@ -221,7 +221,7 @@ const paymentGateways: PaymentGatewayOption[] = [
     fees: "1.95% + ₵0.50",
     processingTime: "Instant",
   },
- /* {
+  {
     id: PaymentGateway.KORA,
     name: "Kora",
     description: "Card, Bank Transfer",
@@ -230,7 +230,7 @@ const paymentGateways: PaymentGatewayOption[] = [
     regions: ["Ghana", "Nigeria", "Kenya"],
     fees: "1.5% + ₵1.00",
     processingTime: "Instant",
-  },*/
+  },
   {
     id: PaymentGateway.CRYPTO,
     name: "Crypto",
