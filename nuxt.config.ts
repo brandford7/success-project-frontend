@@ -38,6 +38,33 @@ export default defineNuxtConfig({
         { charset: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
       ],
+      // ✅ Add favicon links
+      link: [
+        { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "16x16",
+          href: "/favicon-16x16.png",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "32x32",
+          href: "/favicon-32x32.png",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "48x48",
+          href: "/favicon-48x48.png",
+        },
+        {
+          rel: "apple-touch-icon",
+          sizes: "180x180",
+          href: "/favicon-light-256.png",
+        },
+      ],
       script: [
         { src: "https://js.paystack.co/v1/inline.js", defer: true },
         {
@@ -48,7 +75,7 @@ export default defineNuxtConfig({
     },
   },
   // ✅ Use node-server for local dev
-/*  nitro: {
+  /*  nitro: {
     preset: "node-server", // Change from cloudflare-pages for local dev
   },*/
 });
