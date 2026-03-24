@@ -2,14 +2,20 @@
   <div class="max-w-7xl mx-auto px-4 py-12">
     <!-- Header -->
     <div class="text-center mb-12">
-      <h1 class="text-4xl font-bold text-gray-900 mb-4">Choose Your VIP Plan</h1>
-      <p class="text-xl text-gray-600">Get access to premium betting tips and analysis</p>
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">
+        Choose Your VIP Plan
+      </h1>
+      <p class="text-xl text-gray-600">
+        Get access to premium betting tips and analysis
+      </p>
     </div>
 
     <!-- Payment Gateway Selector -->
     <div class="max-w-3xl mx-auto mb-12">
-      <h2 class="text-2xl font-bold text-gray-900 mb-4 text-center">Select Payment Method</h2>
-      
+      <h2 class="text-2xl font-bold text-gray-900 mb-4 text-center">
+        Select Payment Method
+      </h2>
+
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <button
           v-for="gateway in paymentGateways"
@@ -19,7 +25,7 @@
             'p-6 border-2 rounded-lg transition-all',
             selectedGateway === gateway.id
               ? 'border-blue-600 bg-blue-50 shadow-lg'
-              : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
+              : 'border-gray-200 hover:border-gray-300 hover:shadow-md',
           ]"
         >
           <div class="text-center">
@@ -36,16 +42,31 @@
         <div class="flex items-start gap-3">
           <div class="text-2xl">ℹ️</div>
           <div class="flex-1">
-            <p class="font-semibold text-gray-900 mb-1">{{ selectedGatewayInfo.name }} Details</p>
+            <p class="font-semibold text-gray-900 mb-1">
+              {{ selectedGatewayInfo.name }} Details
+            </p>
             <ul class="text-sm text-gray-600 space-y-1">
-              <li>• <strong>Currencies:</strong> {{ selectedGatewayInfo.currencies.join(', ') }}</li>
-              <li>• <strong>Best for:</strong> {{ selectedGatewayInfo.regions.join(', ') }}</li>
-              <li>• <strong>Processing:</strong> {{ selectedGatewayInfo.processingTime }}</li>
+              <li>
+                • <strong>Currencies:</strong>
+                {{ selectedGatewayInfo.currencies.join(", ") }}
+              </li>
+              <li>
+                • <strong>Best for:</strong>
+                {{ selectedGatewayInfo.regions.join(", ") }}
+              </li>
+              <li>
+                • <strong>Processing:</strong>
+                {{ selectedGatewayInfo.processingTime }}
+              </li>
             </ul>
             <!-- ✅ Show crypto notice -->
-            <div v-if="selectedGateway === 'crypto'" class="mt-3 p-3 bg-orange-50 border border-orange-200 rounded">
+            <div
+              v-if="selectedGateway === 'crypto'"
+              class="mt-3 p-3 bg-orange-50 border border-orange-200 rounded"
+            >
               <p class="text-sm text-orange-800">
-                ⚠️ <strong>Note:</strong> Crypto payments have a 10 USD minimum. Daily plan (₵50) is not available.
+                ⚠️ <strong>Note:</strong> Crypto payments have a 10 USD minimum.
+                Daily plan (₵50) is not available.
               </p>
             </div>
           </div>
@@ -62,12 +83,17 @@
           'bg-white rounded-lg shadow-md p-6 border-2 transition-all',
           plan.popular
             ? 'border-blue-600 transform scale-105 relative'
-            : 'border-gray-200 hover:shadow-lg'
+            : 'border-gray-200 hover:shadow-lg',
         ]"
       >
         <!-- Popular Badge -->
-        <div v-if="plan.popular" class="absolute -top-4 left-1/2 transform -translate-x-1/2">
-          <span class="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
+        <div
+          v-if="plan.popular"
+          class="absolute -top-4 left-1/2 transform -translate-x-1/2"
+        >
+          <span
+            class="bg-blue-600 text-white px-4 py-1 rounded-full text-sm font-semibold"
+          >
             Most Popular
           </span>
         </div>
@@ -77,7 +103,9 @@
 
         <!-- Price -->
         <div class="mb-6">
-          <span class="text-4xl font-bold text-gray-900">₵{{ plan.price }}</span>
+          <span class="text-4xl font-bold text-gray-900"
+            >₵{{ plan.price }}</span
+          >
           <span class="text-gray-600"> / {{ plan.duration }} days</span>
         </div>
 
@@ -93,8 +121,16 @@
             :key="index"
             class="flex items-start text-gray-700"
           >
-            <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            <svg
+              class="w-5 h-5 text-green-500 mr-2 flex-shrink-0"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clip-rule="evenodd"
+              />
             </svg>
             <span class="text-sm">{{ feature }}</span>
           </li>
@@ -109,14 +145,26 @@
             plan.popular
               ? 'bg-blue-600 text-white hover:bg-blue-700'
               : 'bg-gray-900 text-white hover:bg-gray-800',
-            upgradingPlanId === plan.id && 'opacity-50 cursor-not-allowed'
+            upgradingPlanId === plan.id && 'opacity-50 cursor-not-allowed',
           ]"
         >
           <span v-if="upgradingPlanId !== plan.id">Get Started</span>
           <span v-else class="flex items-center justify-center">
             <svg class="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+                fill="none"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
             </svg>
             Processing...
           </span>
@@ -128,9 +176,19 @@
     <div class="text-center">
       <p class="text-gray-600 mb-4">Secure payment powered by:</p>
       <div class="flex justify-center items-center gap-8 flex-wrap">
-        <div v-if="selectedGateway === 'paystack'" class="text-gray-500 font-semibold">Paystack 🔒</div>
-        <div v-if="selectedGateway === 'kora'" class="text-gray-500 font-semibold">Kora 🔒</div>
-        <div v-if="selectedGateway === 'crypto'" class="text-gray-500 font-semibold">NOWPayments 🔒</div>
+        <div
+          v-if="selectedGateway === 'paystack'"
+          class="text-gray-500 font-semibold"
+        >
+          Paystack 🔒
+        </div>
+        <!--  <div v-if="selectedGateway === 'kora'" class="text-gray-500 font-semibold">Kora 🔒</div>-->
+        <div
+          v-if="selectedGateway === 'crypto'"
+          class="text-gray-500 font-semibold"
+        >
+          NOWPayments 🔒
+        </div>
       </div>
     </div>
   </div>
@@ -155,38 +213,38 @@ const upgradingPlanId = ref<string | null>(null);
 const paymentGateways: PaymentGatewayOption[] = [
   {
     id: PaymentGateway.PAYSTACK,
-    name: 'Paystack',
-    description: 'Card, Mobile Money',
-    icon: '💳',
-    currencies: ['GHS', 'NGN', 'USD', 'ZAR'],
-    regions: ['Ghana', 'Nigeria', 'South Africa', 'Kenya'],
-    fees: '1.95% + ₵0.50',
-    processingTime: 'Instant',
+    name: "Paystack",
+    description: "Card, Mobile Money",
+    icon: "💳",
+    currencies: ["GHS", "NGN", "USD", "ZAR"],
+    regions: ["Ghana", "Nigeria", "South Africa", "Kenya"],
+    fees: "1.95% + ₵0.50",
+    processingTime: "Instant",
   },
-  {
+ /* {
     id: PaymentGateway.KORA,
-    name: 'Kora',
-    description: 'Card, Bank Transfer',
-    icon: '🏦',
-    currencies: ['GHS', 'NGN', 'KES'],
-    regions: ['Ghana', 'Nigeria', 'Kenya'],
-    fees: '1.5% + ₵1.00',
-    processingTime: 'Instant',
-  },
+    name: "Kora",
+    description: "Card, Bank Transfer",
+    icon: "🏦",
+    currencies: ["GHS", "NGN", "KES"],
+    regions: ["Ghana", "Nigeria", "Kenya"],
+    fees: "1.5% + ₵1.00",
+    processingTime: "Instant",
+  },*/
   {
     id: PaymentGateway.CRYPTO,
-    name: 'Crypto',
-    description: 'BTC, ETH, USDT',
-    icon: '₿',
-    currencies: ['BTC', 'ETH', 'USDT', '300+ coins'],
-    regions: ['Worldwide', 'India', 'Europe', 'Asia'],
-    fees: '0.5% - 1%',
-    processingTime: '10-30 minutes',
+    name: "Crypto",
+    description: "BTC, ETH, USDT",
+    icon: "₿",
+    currencies: ["BTC", "ETH", "USDT", "300+ coins"],
+    regions: ["Worldwide", "India", "Europe", "Asia"],
+    fees: "0.5% - 1%",
+    processingTime: "10-30 minutes",
   },
 ];
 
-const selectedGatewayInfo = computed(() => 
-  paymentGateways.find(g => g.id === selectedGateway.value)
+const selectedGatewayInfo = computed(() =>
+  paymentGateways.find((g) => g.id === selectedGateway.value),
 );
 
 // All plans
@@ -262,7 +320,7 @@ const allPlans: VipPlan[] = [
 const filteredPlans = computed(() => {
   if (selectedGateway.value === PaymentGateway.CRYPTO) {
     // Remove daily plan for crypto (below $5 minimum)
-    return allPlans.filter(plan => plan.id !== 'daily');
+    return allPlans.filter((plan) => plan.id !== "daily");
   }
   return allPlans;
 });
@@ -282,10 +340,10 @@ const handleUpgrade = async (plan: VipPlan) => {
   try {
     const { $api } = useNuxtApp();
 
-    console.log('=== UPGRADE DEBUG ===');
-    console.log('Plan:', plan.name);
-    console.log('Duration:', plan.duration);
-    console.log('Gateway:', selectedGateway.value);
+    console.log("=== UPGRADE DEBUG ===");
+    console.log("Plan:", plan.name);
+    console.log("Duration:", plan.duration);
+    console.log("Gateway:", selectedGateway.value);
 
     // Initialize payment with selected gateway
     const response = await $api.post("/payments/initialize", {
@@ -297,18 +355,20 @@ const handleUpgrade = async (plan: VipPlan) => {
     console.log("Payment initialized:", data);
 
     // Store gateway and reference in localStorage for callback
-    localStorage.setItem('payment_gateway', selectedGateway.value);
-    localStorage.setItem('payment_reference', data.reference);
+    localStorage.setItem("payment_gateway", selectedGateway.value);
+    localStorage.setItem("payment_reference", data.reference);
 
     // Redirect to payment page
     window.location.href = data.authorizationUrl;
   } catch (error: any) {
     console.error("Payment initialization failed:", error);
-    
+
     // ✅ Show user-friendly error message
-    const errorMessage = error.response?.data?.message || "Failed to initialize payment. Please try again.";
+    const errorMessage =
+      error.response?.data?.message ||
+      "Failed to initialize payment. Please try again.";
     alert(errorMessage);
-    
+
     upgradingPlanId.value = null;
   }
 };
