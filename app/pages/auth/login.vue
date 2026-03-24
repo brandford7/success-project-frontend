@@ -103,12 +103,13 @@
           <span class="ml-2 text-gray-700">Remember me</span>
         </label>
         <!-- Forgot Password Link -->
-        <NuxtLink
+       <!-- <NuxtLink
           to="/auth/forgot-password"
           class="text-sm text-blue-600 hover:text-blue-700"
         >
           Forgot your password?
         </NuxtLink>
+        -->
       </div>
 
       <!-- Submit Button -->
