@@ -182,47 +182,68 @@
       </NuxtLink>
     </div>
 
-    <div v-else class="bg-white rounded-lg shadow-md overflow-hidden">
+    <!-- ✅ Add wrapper with horizontal scroll -->
+    <div v-else class="overflow-x-auto bg-white rounded-lg shadow-md">
+      <!-- ✅ Add scroll hint for mobile -->
+      <div class="md:hidden px-4 py-2 bg-gray-50 border-b border-gray-200">
+        <p class="text-xs text-gray-600 flex items-center">
+          <svg
+            class="w-4 h-4 mr-1"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 5l7 7-7 7M5 5l7 7-7 7"
+            />
+          </svg>
+          Swipe left to see more columns
+        </p>
+      </div>
+
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr>
             <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap"
             >
               Match
             </th>
             <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap"
             >
               Pick
             </th>
             <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap"
             >
               Category
             </th>
             <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap"
             >
               Odds
             </th>
             <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap"
             >
               Status
             </th>
             <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap"
             >
               Type
             </th>
             <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap"
             >
               Kickoff
             </th>
             <th
-              class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+              class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap"
             >
               Actions
             </th>
@@ -234,7 +255,7 @@
             :key="tip.id"
             class="hover:bg-gray-50"
           >
-            <td class="px-6 py-4">
+            <td class="px-6 py-4 whitespace-nowrap">
               <div>
                 <p class="font-medium text-gray-900">
                   {{ tip.match.toLocaleUpperCase() }}
@@ -242,16 +263,18 @@
                 <p class="text-sm text-gray-500">{{ tip.league }}</p>
               </div>
             </td>
-            <td class="px-6 py-4 text-sm text-gray-900">
+            <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
               {{ tip.pick }}
             </td>
-            <td class="px-6 py-4 text-sm text-gray-500">
+            <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
               {{ tip.category }}
             </td>
-            <td class="px-6 py-4 text-sm font-semibold text-blue-600">
+            <td
+              class="px-6 py-4 text-sm font-semibold text-blue-600 whitespace-nowrap"
+            >
               {{ tip.odds }}
             </td>
-            <td class="px-6 py-4">
+            <td class="px-6 py-4 whitespace-nowrap">
               <span
                 :class="getStatusBadgeClass(tip.status)"
                 class="px-3 py-1 rounded-full text-xs font-semibold uppercase"
@@ -259,7 +282,7 @@
                 {{ tip.status }}
               </span>
             </td>
-            <td class="px-6 py-4">
+            <td class="px-6 py-4 whitespace-nowrap">
               <span
                 v-if="tip.isVip"
                 class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-amber-100 text-amber-800"
@@ -269,10 +292,12 @@
               </span>
               <span v-else class="text-sm text-gray-500">Free</span>
             </td>
-            <td class="px-6 py-4 text-sm text-gray-500">
+            <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
               {{ formatDate(tip.kickoffTime) }}
             </td>
-            <td class="px-6 py-4 text-right text-sm font-medium space-x-2">
+            <td
+              class="px-6 py-4 text-right text-sm font-medium space-x-2 whitespace-nowrap"
+            >
               <NuxtLink
                 :to="`/admin/tips/${tip.id}/edit`"
                 class="text-blue-600 hover:text-blue-900"

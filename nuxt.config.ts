@@ -40,30 +40,33 @@ export default defineNuxtConfig({
       ],
       // ✅ Add favicon links
       link: [
-        { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
+        { rel: "icon", type: "image/x-icon", href: "/favicon.ico?v=1" },
         {
           rel: "icon",
           type: "image/png",
           sizes: "16x16",
-          href: "/favicon-16x16.png",
+          href: "/favicon-16x16.png?v=1",
         },
         {
           rel: "icon",
           type: "image/png",
           sizes: "32x32",
-          href: "/favicon-32x32.png",
+          href: "/favicon-32x32.png?v=1",
         },
         {
           rel: "icon",
           type: "image/png",
           sizes: "48x48",
-          href: "/favicon-48x48.png",
+          href: "/favicon-48x48.png?v=1",
         },
         {
           rel: "apple-touch-icon",
           sizes: "180x180",
-          href: "/favicon-light-256.png",
+          href: "/apple-touch-icon.png?v=1",
         },
+
+        // ✅ Web manifest
+        { rel: "manifest", href: "/site.webmanifest" },
       ],
       script: [
         { src: "https://js.paystack.co/v1/inline.js", defer: true },
