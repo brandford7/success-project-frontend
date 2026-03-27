@@ -13,8 +13,12 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxtjs/tailwindcss",
     "pinia-plugin-persistedstate/nuxt",
-  ],
 
+    "nuxt-gtag",
+  ],
+  gtag: {
+    id: process.env.NUXT_PUBLIC_GA_MEASUREMENT_ID as string,
+  },
   css: ["./app/assets/css/main.css"],
 
   postcss: {
@@ -28,6 +32,7 @@ export default defineNuxtConfig({
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE,
       paystackPublicKey: process.env.NUXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
+      gaMeasurementId: process.env.NUXT_PUBLIC_GA_MEASUREMENT_ID || "",
     },
   },
 
@@ -40,7 +45,7 @@ export default defineNuxtConfig({
       ],
       // ✅ Add favicon links
       link: [
-        { rel: "icon", type: "image/x-icon", href: "/favicon.ico?v=1" },
+        { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
         {
           rel: "icon",
           type: "image/png",
