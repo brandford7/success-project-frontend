@@ -7,39 +7,45 @@
           <!-- Left side: Logo and main links -->
           <div class="flex items-center space-x-8">
             <!-- Logo -->
-            <NuxtLink to="/" class="text-2xl font-bold text-blue-600 hover:text-blue-700">
+            <NuxtLink
+              to="/"
+              class="text-2xl font-bold text-blue-600 hover:text-blue-700"
+            >
               ⚽ Success Secrets Bet
             </NuxtLink>
 
             <!-- Navigation links (only show if logged in) -->
-            <div v-if="authStore.isAuthenticated" class="hidden md:flex items-center space-x-6">
-              <NuxtLink 
-                to="/dashboard" 
+            <div
+              v-if="authStore.isAuthenticated"
+              class="hidden md:flex items-center space-x-6"
+            >
+              <NuxtLink
+                to="/dashboard"
                 class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
               >
                 Dashboard
               </NuxtLink>
 
-              <NuxtLink 
-                to="/tips" 
+              <NuxtLink
+                to="/tips"
                 class="text-gray-700 hover:text-blue-600 font-medium transition-colors"
               >
                 Tips
               </NuxtLink>
 
-              <NuxtLink 
+              <NuxtLink
                 v-if="authStore.isVip"
-                to="/tips/vip" 
+                to="/tips/vip"
                 class="text-amber-600 hover:text-amber-700 font-medium transition-colors flex items-center"
               >
                 <span class="mr-1">⭐</span>
                 VIP Tips
               </NuxtLink>
 
-              <NuxtLink 
+              <NuxtLink
                 v-if="authStore.isAdmin"
-                to="/admin" 
-                class=" hover:text-purple-700 font-medium transition-colors"
+                to="/admin"
+                class="hover:text-purple-700 font-medium transition-colors"
               >
                 Admin
               </NuxtLink>
@@ -56,9 +62,17 @@
                     {{ authStore.user?.email || authStore.user?.phoneNumber }}
                   </p>
                   <p class="text-xs text-gray-500">
-                    <span v-if="authStore.isVip" class="text-amber-600 font-semibold">VIP Member</span>
-                    <span v-else-if="authStore.isAdmin" class="text-purple-600 font-semibold">Admin</span>
-                    <span v-else>{{ authStore.user?.roles.join(', ') }}</span>
+                    <span
+                      v-if="authStore.isVip"
+                      class="text-amber-600 font-semibold"
+                      >VIP Member</span
+                    >
+                    <span
+                      v-else-if="authStore.isAdmin"
+                      class="text-purple-600 font-semibold"
+                      >Admin</span
+                    >
+                    <span v-else>{{ authStore.user?.roles.join(", ") }}</span>
                   </p>
                 </div>
 
@@ -74,14 +88,14 @@
 
             <!-- Show login/register if not authenticated -->
             <template v-else>
-              <NuxtLink 
-                to="/auth/login" 
+              <NuxtLink
+                to="/auth/login"
                 class="text-gray-700 hover:text-blue-600 font-medium"
               >
                 Login
               </NuxtLink>
-              <NuxtLink 
-                to="/auth/register" 
+              <NuxtLink
+                to="/auth/register"
                 class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
               >
                 Register
@@ -97,23 +111,19 @@
       <slot />
     </main>
 
-    <!-- Footer (Optional) -->
-    <footer class="bg-white border-t border-gray-200 mt-auto">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <p class="text-center text-gray-500 text-sm">
-          © 2025 Success Secrets Bet. All rights reserved.
-        </p>
-      </div>
-    </footer>
+    <!-- Footer -->
+    <Footer />
   </div>
 </template>
 
 <script setup lang="ts">
-const authStore = useAuthStore()
+import Footer from "@/components/ui/footer.vue";
+
+const authStore = useAuthStore();
 
 const handleLogout = () => {
-  if (confirm('Are you sure you want to logout?')) {
-    authStore.logout()
+  if (confirm("Are you sure you want to logout?")) {
+    authStore.logout();
   }
-}
+};
 </script>
