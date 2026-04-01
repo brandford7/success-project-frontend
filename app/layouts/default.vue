@@ -117,7 +117,7 @@
 </template>
 
 <script setup lang="ts">
-import Footer from "@/components/ui/footer.vue";
+import Footer from "~/components/ui/Footer.vue";
 
 const authStore = useAuthStore();
 
