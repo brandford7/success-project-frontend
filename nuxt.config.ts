@@ -40,7 +40,7 @@ export default defineNuxtConfig({
       paystackPublicKey: process.env.NUXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
       gaMeasurementId: process.env.NUXT_PUBLIC_GA_MEASUREMENT_ID || "",
       googleAdsense: {
-        id: process.env.NUXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID,
+        id: process.env.GOOGLE_ADSENSE_ID,
         test: process.env.GOOGLE_ADSENSE_TEST_MODE === "true",
       },
     },
