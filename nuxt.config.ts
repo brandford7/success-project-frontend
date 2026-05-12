@@ -73,6 +73,7 @@ export default defineNuxtConfig({
           sizes: "180x180",
           href: "/apple-touch-icon.png",
         },
+        { rel: "manifest", href: "/manifest.json" },
       ],
       meta: [
         { charset: "utf-8" },
