@@ -29,9 +29,13 @@ export default defineNuxtConfig({
     },
   },
 
+  /*
   googleAdsense: {
     onPageLoad: false,
     pageLevelAds: false,
+  }, */
+  googleAdsense: {
+    id: "ca-pub-3825617756167561",
   },
 
   runtimeConfig: {
@@ -39,10 +43,10 @@ export default defineNuxtConfig({
       apiBase: process.env.NUXT_PUBLIC_API_BASE,
       paystackPublicKey: process.env.NUXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
       gaMeasurementId: process.env.NUXT_PUBLIC_GA_MEASUREMENT_ID || "",
-      googleAdsense: {
+      /* googleAdsense: {
         id: process.env.GOOGLE_ADSENSE_ID,
         test: process.env.GOOGLE_ADSENSE_TEST_MODE === "true",
-      },
+      },*/
     },
   },
 
