@@ -13,6 +13,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxtjs/tailwindcss",
     "pinia-plugin-persistedstate/nuxt",
+    "@nuxtjs/google-adsense",
 
     "nuxt-gtag",
   ],
@@ -28,11 +29,20 @@ export default defineNuxtConfig({
     },
   },
 
+  googleAdsense: {
+    onPageLoad: false,
+    pageLevelAds: false,
+  },
+
   runtimeConfig: {
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE,
       paystackPublicKey: process.env.NUXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
       gaMeasurementId: process.env.NUXT_PUBLIC_GA_MEASUREMENT_ID || "",
+      googleAdsense: {
+        id: process.env.NUXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID,
+        test: process.env.GOOGLE_ADSENSE_TEST_MODE === "true",
+      },
     },
   },
 
