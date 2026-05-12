@@ -64,6 +64,7 @@ export default defineNuxtConfig({
           src: "https://korablobstorage.blob.core.windows.net/modal-bucket/korapay-collections.min.js",
           defer: true,
         },
+        
       ],
     },
   },
