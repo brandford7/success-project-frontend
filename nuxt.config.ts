@@ -53,6 +53,27 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: "Success Secrets Bet- Your Ultimate Sports Betting Companion",
+      link: [
+        { rel: "icon", type: "image/x-icon", href: "/favicon.ico" }, // PNG Icons for better quality
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "32x32",
+          href: "/favicon-32x32.png",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "16x16",
+          href: "/favicon-16x16.png",
+        },
+        // Apple Touch Icon for iPhone/iPad
+        {
+          rel: "apple-touch-icon",
+          sizes: "180x180",
+          href: "/apple-touch-icon.png",
+        },
+      ],
       meta: [
         { charset: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -64,7 +85,6 @@ export default defineNuxtConfig({
           src: "https://korablobstorage.blob.core.windows.net/modal-bucket/korapay-collections.min.js",
           defer: true,
         },
-        
       ],
     },
   },
